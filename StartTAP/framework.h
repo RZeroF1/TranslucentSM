@@ -22,7 +22,7 @@
 #include <winrt/Windows.Foundation.Collections.h>
 #include <winrt/Windows.UI.Xaml.Media.h>
 #include <winrt/Windows.UI.Xaml.Media.Media3D.h>
-#include <winrt/Microsoft.UI.Xaml.Controls.h>
+// No Microsoft.UI.Xaml APIs are used; consume the installed Windows SDK projections.
 #include <winrt/Windows.UI.Xaml.Controls.Primitives.h>
 #include <winrt/Windows.UI.Xaml.Input.h>
 #include <winrt/Windows.UI.ViewManagement.h>

@@ -63,7 +63,15 @@ HRESULT VisualTreeWatcher::OnVisualTreeChange(ParentChildRelation relation, Visu
 		{
 			// w10 hamburger menu fix
 			auto backElement = FromHandle<Border>(element.Handle);
-			backElement.Background().as<AcrylicBrush>().TintOpacity(0);
+			// This template-part name is also used by non-acrylic controls,
+			// including the Windows 10 tile-group title editor. Leave them intact.
+			if (auto background = backElement.Background())
+			{
+				if (auto acrylic = background.try_as<AcrylicBrush>())
+				{
+					acrylic.TintOpacity(0);
+				}
+			}
 		}
 		else if (type == L"StartDocked.SearchBoxToggleButton")
 		{

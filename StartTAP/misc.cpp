@@ -1,4 +1,4 @@
-#include "misc.h"
+﻿#include "misc.h"
 
 HRESULT AddSettingsPanel(Grid rootGrid)
 {
@@ -20,25 +20,25 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 	TextBlock tbx;
 	tbx.FontFamily(Windows::UI::Xaml::Media::FontFamily(L"Segoe UI Variable"));
 	tbx.FontSize(13.0);
-	winrt::hstring hs = L"TintOpacity";
+	winrt::hstring hs = L"鲜艳程度";
 	tbx.Text(hs);
 	stackPanel.Children().Append(tbx);
 
 	Slider slider;
 	slider.Width(140);
-	slider.Value(dwOpacity);
+	slider.Value(100.0 - (dwOpacity > 100 ? 100 : dwOpacity));
 	stackPanel.Children().Append(slider);
 
 	TextBlock tbx1;
 	tbx1.FontFamily(Windows::UI::Xaml::Media::FontFamily(L"Segoe UI Variable"));
 	tbx1.FontSize(13.0);
-	winrt::hstring hs1 = L"TintLuminosityOpacity";
+	winrt::hstring hs1 = L"通透程度";
 	tbx1.Text(hs1);
 	stackPanel.Children().Append(tbx1);
 
 	Slider slider2;
 	slider2.Width(140);
-	slider2.Value(dwLuminosity);
+	slider2.Value(100.0 - (dwLuminosity > 100 ? 100 : dwLuminosity));
 	stackPanel.Children().Append(slider2);
 
 	static HKEY subKey = nullptr;
@@ -46,14 +46,14 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 	RegCreateKeyEx(HKEY_CURRENT_USER, L"SOFTWARE\\TranslucentSM", 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &subKey, NULL);
 
 	slider.ValueChanged([](Windows::Foundation::IInspectable const& sender, RoutedEventArgs const&) {
-		double sliderValue = sender.as<Slider>().Value();
+		double sliderValue = 100.0 - sender.as<Slider>().Value();
 		acrylicBorder.Background().as<AcrylicBrush>().TintOpacity(double(sliderValue) / 100);
 
 		SetVal(subKey, L"TintOpacity", sliderValue);
 		});
 
 	slider2.ValueChanged([](Windows::Foundation::IInspectable const& sender, RoutedEventArgs const&) {
-		double sliderValue = sender.as<Slider>().Value();
+		double sliderValue = 100.0 - sender.as<Slider>().Value();
 		acrylicBorder.Background().as<AcrylicBrush>().TintLuminosityOpacity(double(sliderValue) / 100);
 
 		SetVal(subKey, L"TintLuminosityOpacity", sliderValue);
@@ -72,7 +72,7 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 		auto root = VisualTreeHelper::GetParent(srchBox).as<FrameworkElement>();
 
 		auto checkBox = CheckBox();
-		checkBox.Content(box_value(L"Hide search box"));
+		checkBox.Content(box_value(L"隐藏搜索框"));
 		stackPanel.Children().Append(checkBox);
 		if (dwHide == 1)
 		{
@@ -106,7 +106,7 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 		static auto acrylicOverlay = acrylicOverlayElm.as<Border>();
 
 		auto checkBox = CheckBox();
-		checkBox.Content(box_value(L"Hide white border"));
+		checkBox.Content(box_value(L"隐藏白色边框"));
 		stackPanel.Children().Append(checkBox);
 		if (dwBorder == 1)
 			checkBox.IsChecked(true);
@@ -128,7 +128,7 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 		auto topRoot = topRootElm.as<Grid>();
 
 		auto checkBox = CheckBox();
-		checkBox.Content(box_value(L"Hide recommended"));
+		checkBox.Content(box_value(L"隐藏推荐项目"));
 		stackPanel.Children().Append(checkBox);
 		if (dwRec == 1)
 		{
@@ -208,7 +208,7 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 		auto grid = VisualTreeHelper::GetChild(rootpanel, 0).as<Grid>();
 		if (grid != nullptr)
 		{
-			ToolTipService::SetToolTip(bt, box_value(L"TranslucentSM settings"));
+			ToolTipService::SetToolTip(bt, box_value(L"TranslucentSM 设置"));
 
 			f.Glyph(L"\uE104");
 			f.FontFamily(Media::FontFamily(L"Segoe Fluent Icons"));
@@ -260,7 +260,7 @@ HRESULT AddSettingsPanel(Grid rootGrid)
 		mainpanel.Children().Append(bt);
 
 		auto textBlock = TextBlock();
-		textBlock.Text(L"TranslucentSM settings");
+		textBlock.Text(L"TranslucentSM 设置");
 		textBlock.Margin({ 5,13,0,0 });
 		textBlock.HorizontalAlignment(HorizontalAlignment::Left);
 		textBlock.FontSize(15);
